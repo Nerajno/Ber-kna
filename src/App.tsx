@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import './App.css';
 
 export function App() {
   const [expression, setExpression] = useState('');
   const [answer, setAnswer] = useState('');
   const et = expression.trim();
 
-  const isOperator = ( symbol: string ) => {
-    switch ( symbol ) {
+  // Function to check if a symbol is an operator
+  const isOperator = (symbol: string) => {
+    switch (symbol) {
       case '+':
       case '-':
       case '*':
@@ -15,24 +17,25 @@ export function App() {
       default:
         return false;
     }
-  }
+  };
 
+  // Function to perform the calculation
   const calculate = () => {
-      // if the last char is an operator, do not calculate
-     if( isOperator(et.charAt(et.length - 1)) ) return;
-      // clean the expression so that two operators in a row uses the last operator
-      // 5 * - + 5 = 10
+    // If the last character is an operator, do not calculate
+    if (isOperator(et.charAt(et.length - 1))) return;
 
-     const parts = et.split(" ");
-     const newParts = [];
+    // Clean the expression so that two operators in a row use the last operator
+    // For example: 5 * - + 5 = 10
+    const parts = et.split(' ');
+    const newParts = [];
 
-     for (let i = parts.length - 1; i >= 0; i--) {
-      if (["*", "/", "+"].includes(parts[i]) && isOperator(parts[i -1])){
+    for (let i = parts.length - 1; i >= 0; i--) {
+      if (['*', '/', '+'].includes(parts[i]) && isOperator(parts[i - 1])) {
         newParts.unshift(parts[i]);
         let j = 0;
         let k = i - 1;
-        while( isOperator(parts[k])){
-          k --;
+        while (isOperator(parts[k])) {
+          k--;
           j++;
         }
         i -= j;
@@ -40,52 +43,67 @@ export function App() {
         newParts.unshift(parts[i]);
       }
     }
-    const newExpression = newParts.join(" ");
-    if(isOperator(newExpression.charAt(0))){
+
+    // Join the cleaned parts to form a new expression
+    const newExpression = newParts.join(' ');
+
+    // Evaluate and set the answer
+    if (isOperator(newExpression.charAt(0))) {
       setAnswer(eval(answer + newExpression) as string);
-    }else{
+    } else {
       setAnswer(eval(newExpression) as string);
     }
-    setExpression("");
-  }
+    setExpression('');
+  };
 
-  const buttonPress = ( symbol: string ) => {
-    //console.log( symbol);
-    if ( symbol === 'clear' ) {
-      setExpression('');
-      setAnswer('0');
-    } else if ( symbol === 'negative' ) {
-      if( answer === '') return;
-      setAnswer(
-        answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer
-      )
-    } else if ( symbol === 'percentage' ) {
-      if( answer === '') return;
-      setAnswer((parseFloat(answer.toString()) / 100).toString());
-    } else if (isOperator(symbol)){
-      setExpression( et + " " + symbol + " ");
-    } else if ( symbol === '=' ) {
-      calculate();
-    }else if ( symbol === '0'){
-      if(expression.charAt(0) !=="0"){
+  // Function to handle button presses
+  const buttonPress = (symbol: string) => {
+    switch (symbol) {
+      case 'clear':
+        // Clear the expression and answer
+        setExpression('');
+        setAnswer('');
+        break;
+      case 'negative':
+        if (answer === '') return;
+        // Toggle the sign of the answer
+        setAnswer(
+          answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer
+        );
+        break;
+      case 'percentage':
+        if (answer === '') return;
+        // Calculate percentage and set the answer
+        setAnswer((parseFloat(answer.toString()) / 100).toString());
+        break;
+      case '=':
+        // Trigger the calculation
+        calculate();
+        break;
+      case '0':
+        // Allow adding zeros to the expression
         setExpression(expression + symbol);
-      }
-    } else if (symbol === '.'){
-      setExpression(expression + symbol );
-      // split by operators and get last number
-      const lstNum = expression.split(/[-+/*]/g).pop();
-      if(!lstNum) return;
-      if( lstNum?.includes('.')) return;;
-      setExpression(expression + symbol)
-    } else {
-      if( expression.charAt(0) === "0"){
-        setExpression(expression.slice(1) + symbol);
-      } else {
+        break;
+      case '.':
+        // Allow adding a decimal point to the expression
         setExpression(expression + symbol);
-      }
+        // Split by operators and get the last number
+        const lastNum = expression.split(/[-+/*]/g).pop();
+        if (!lastNum) return;
+        if (lastNum?.includes('.')) return;
+        setExpression(expression + symbol);
+        break;
+      default:
+        // Handle other digits and symbols
+        if (expression.charAt(0) === '0') {
+          // Remove leading zero if it exists
+          setExpression(expression.slice(1) + symbol);
+        } else {
+          setExpression(expression + symbol);
+        }
+        break;
     }
-  }
-
+  };
 
   return (
     <>
@@ -93,8 +111,8 @@ export function App() {
         <h1>Calculator Application</h1>
         <div id='calculator'>
           <div id='display' style={{ textAlign: 'right' }}>
-            <div id='answer'>0</div>
-            <div id='expression'></div>
+            <div id='answer'>{answer}</div>
+            <div id='expression'>{expression}</div>
           </div>
           <button
             id='clear'
