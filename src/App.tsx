@@ -25,36 +25,39 @@ export function App() {
     if (isOperator(et.charAt(et.length - 1))) return;
 
     // Clean the expression so that two operators in a row use the last operator
-    // For example: 5 * - + 5 = 10
-    const parts = et.split(' ');
+    // For example: 5 - 2 = / 2 = should produce an output of 1.5
+    const parts = et.split(/(\*|\/|\+|-)/);
     const newParts = [];
 
-    for (let i = parts.length - 1; i >= 0; i--) {
-      if (['*', '/', '+'].includes(parts[i]) && isOperator(parts[i - 1])) {
-        newParts.unshift(parts[i]);
-        let j = 0;
-        let k = i - 1;
-        while (isOperator(parts[k])) {
-          k--;
-          j++;
-        }
-        i -= j;
-      } else {
-        newParts.unshift(parts[i]);
+    for (let i = 0; i < parts.length; i++) {
+      if (isOperator(parts[i])) {
+        // Skip consecutive operators
+        continue;
       }
+      newParts.push(parts[i]);
     }
 
     // Join the cleaned parts to form a new expression
     const newExpression = newParts.join(' ');
 
     // Evaluate and set the answer
-    if (isOperator(newExpression.charAt(0))) {
-      setAnswer(eval(answer + newExpression) as string);
-    } else {
-      setAnswer(eval(newExpression) as string);
+    try {
+      const result = eval(newExpression);
+      if (!isNaN(result) && isFinite(result)) {
+        // Check if the result is a valid number
+        setAnswer(result.toString());
+      } else {
+        // Handle invalid expressions
+        setAnswer('Error');
+      }
+    } catch (error) {
+      // Handle evaluation errors
+      setAnswer('Error');
     }
     setExpression('');
   };
+
+
 
   // Function to handle button presses
   const buttonPress = (symbol: string) => {
@@ -71,7 +74,8 @@ export function App() {
           answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer
         );
         break;
-      case 'percentage':
+
+      case 'perentage':
         if (answer === '') return;
         // Calculate percentage and set the answer
         setAnswer((parseFloat(answer.toString()) / 100).toString());
@@ -81,8 +85,8 @@ export function App() {
         calculate();
         break;
       case '0':
-        // Allow adding zeros to the expression
-        setExpression(expression + symbol);
+       // Allow adding zeros to the expression, removing leading zeros
+       setExpression(expression === '0' ? '0' : expression + symbol);
         break;
       case '.':
         // Allow adding a decimal point to the expression
