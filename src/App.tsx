@@ -25,16 +25,24 @@ export function App() {
     if (isOperator(et.charAt(et.length - 1))) return;
 
     // Clean the expression so that two operators in a row use the last operator
-    // For example: 5 - 2 = / 2 = should produce an output of 1.5
-    const parts = et.split(/(\*|\/|\+|-)/);
+    // For example: 5 * - + 5 = 10
+    const parts = et.split(' ');
     const newParts = [];
 
     for (let i = 0; i < parts.length; i++) {
-      if (isOperator(parts[i])) {
-        // Skip consecutive operators
-        continue;
+      if (['*', '/', '+'].includes(parts[i]) && isOperator(parts[i + 1])) {
+        newParts.push(parts[i]);
+        let j = 0;
+        let k = i + 1;
+        while (isOperator(parts[k])) {
+          newParts.push(parts[k]);
+          k++;
+          j++;
+        }
+        i += j;
+      } else {
+        newParts.push(parts[i]);
       }
-      newParts.push(parts[i]);
     }
 
     // Join the cleaned parts to form a new expression
@@ -43,8 +51,7 @@ export function App() {
     // Evaluate and set the answer
     try {
       const result = eval(newExpression);
-      if (!isNaN(result) && isFinite(result)) {
-        // Check if the result is a valid number
+      if (!isNaN(result)) {
         setAnswer(result.toString());
       } else {
         // Handle invalid expressions
@@ -54,9 +61,9 @@ export function App() {
       // Handle evaluation errors
       setAnswer('Error');
     }
+
     setExpression('');
   };
-
 
 
   // Function to handle button presses
