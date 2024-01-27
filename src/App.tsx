@@ -4,7 +4,6 @@ import './App.css';
 export function App() {
   const [expression, setExpression] = useState('');
   const [answer, setAnswer] = useState('');
-  const et = expression.trim();
 
   // Function to check if a symbol is an operator
   const isOperator = (symbol: string) => {
@@ -21,50 +20,8 @@ export function App() {
 
   // Function to perform the calculation
   const calculate = () => {
-    // If the last character is an operator, do not calculate
-    if (isOperator(et.charAt(et.length - 1))) return;
 
-    // Clean the expression so that two operators in a row use the last operator
-    // For example: 5 * - + 5 = 10
-    const parts = et.split(' ');
-    const newParts = [];
-
-    for (let i = 0; i < parts.length; i++) {
-      if (['*', '/', '+'].includes(parts[i]) && isOperator(parts[i + 1])) {
-        newParts.push(parts[i]);
-        let j = 0;
-        let k = i + 1;
-        while (isOperator(parts[k])) {
-          newParts.push(parts[k]);
-          k++;
-          j++;
-        }
-        i += j;
-      } else {
-        newParts.push(parts[i]);
-      }
-    }
-
-    // Join the cleaned parts to form a new expression
-    const newExpression = newParts.join(' ');
-
-    // Evaluate and set the answer
-    try {
-      const result = eval(newExpression);
-      if (!isNaN(result)) {
-        setAnswer(result.toString());
-      } else {
-        // Handle invalid expressions
-        setAnswer('Error');
-      }
-    } catch (error) {
-      // Handle evaluation errors
-      setAnswer('Error');
-    }
-
-    setExpression('');
   };
-
 
   // Function to handle button presses
   const buttonPress = (symbol: string) => {
@@ -122,7 +79,7 @@ export function App() {
         <h1>Calculator Application</h1>
         <div id='calculator'>
           <div id='display' style={{ textAlign: 'right' }}>
-            <div id='answer'>{answer}</div>
+            <div id='answer'>{answer || '0'}</div>
             <div id='expression'>{expression}</div>
           </div>
           <button
