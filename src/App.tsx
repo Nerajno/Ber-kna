@@ -122,7 +122,7 @@ export function App() {
         <h1>Calculator Application</h1>
         <div id='calculator'>
           <div id='display' style={{ textAlign: 'right' }}>
-            <div id='answer'>{answer}</div>
+            <div id='answer'>{answer || '0'}</div>
             <div id='expression'>{expression}</div>
           </div>
           <button
