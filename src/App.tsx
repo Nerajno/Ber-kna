@@ -112,6 +112,8 @@ export function App() {
         } else {
           setExpression(expression + symbol);
         }
+        //TODO: 
+        ('expression').innerText = expression;
         break;
     }
   };
