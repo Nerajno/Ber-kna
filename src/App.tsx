@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './App.css';
 
 export function App() {
   const [expression, setExpression] = useState('');
   const [answer, setAnswer] = useState('');
   const et = expression.trim();
+
+  const displayExpress = useRef(null);
 
   // Function to check if a symbol is an operator
   const isOperator = (symbol: string) => {
@@ -19,49 +21,40 @@ export function App() {
     }
   };
 
+
   // Function to perform the calculation
   const calculate = () => {
     // If the last character is an operator, do not calculate
     if (isOperator(et.charAt(et.length - 1))) return;
-
     // Clean the expression so that two operators in a row use the last operator
     // For example: 5 * - + 5 = 10
     const parts = et.split(' ');
+    console.log(typeof parts);
     const newParts = [];
 
-    for (let i = 0; i < parts.length; i++) {
-      if (['*', '/', '+'].includes(parts[i]) && isOperator(parts[i + 1])) {
-        newParts.push(parts[i]);
+    for (let i = parts.length - 1; i >= 0; i--) {
+      if (['*', '/', '+'].includes(parts[i]) && isOperator(parts[i - 1])) {
+        newParts.unshift(parts[i]);
         let j = 0;
-        let k = i + 1;
+        let k = i - 1;
         while (isOperator(parts[k])) {
-          newParts.push(parts[k]);
-          k++;
+          k--;
           j++;
         }
-        i += j;
+        i -= j;
       } else {
-        newParts.push(parts[i]);
+        newParts.unshift(parts[i]);
       }
     }
 
     // Join the cleaned parts to form a new expression
     const newExpression = newParts.join(' ');
-
     // Evaluate and set the answer
-    try {
-      const result = eval(newExpression);
-      if (!isNaN(result)) {
-        setAnswer(result.toString());
-      } else {
-        // Handle invalid expressions
-        setAnswer('Error');
-      }
-    } catch (error) {
-      // Handle evaluation errors
-      setAnswer('Error');
+    if (isOperator(newExpression.charAt(0))) {
+      setAnswer(eval(answer + newExpression) as string);
+    } else {
+      setAnswer(eval(newExpression) as string);
     }
-
     setExpression('');
   };
 
@@ -81,7 +74,6 @@ export function App() {
           answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer
         );
         break;
-
       case 'perentage':
         if (answer === '') return;
         // Calculate percentage and set the answer
@@ -112,11 +104,10 @@ export function App() {
         } else {
           setExpression(expression + symbol);
         }
-        //TODO: 
-        ('expression').innerText = expression;
         break;
     }
   };
+
 
   return (
     <>
