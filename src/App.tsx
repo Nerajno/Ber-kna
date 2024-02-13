@@ -71,7 +71,7 @@ export function App() {
           answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer
         );
         break;
-      case 'perentage':
+      case 'percentage':
         if (answer === '') return;
         // Calculate percentage and set the answer
         setAnswer((parseFloat(answer.toString()) / 100).toString());
