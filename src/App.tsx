@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 export function App() {
@@ -6,7 +6,7 @@ export function App() {
   const [answer, setAnswer] = useState('');
   const et = expression.trim();
 
-  const displayExpress = useRef(null);
+  //const displayExpress = useRef(null);
 
   //Function to check if a symbol is an operator
   const isOperator = (symbol: string) => {
@@ -55,7 +55,6 @@ export function App() {
     setExpression('');
   };
 
-
   // Function to handle button presses
   const buttonPress = (symbol: string) => {
     switch (symbol) {
@@ -81,8 +80,8 @@ export function App() {
         calculate();
         break;
       case '0':
-       // Allow adding zeros to the expression, removing leading zeros
-       setExpression(expression === '0' ? '0' : expression + symbol);
+        // Allow adding zeros to the expression, removing leading zeros
+        setExpression(expression === '0' ? '0' : expression + symbol);
         break;
       case '.':
         // Allow adding a decimal point to the expression
@@ -104,7 +103,6 @@ export function App() {
         break;
     }
   };
-
 
   return (
     <>
