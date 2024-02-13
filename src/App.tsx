@@ -8,7 +8,7 @@ export function App() {
 
   const displayExpress = useRef(null);
 
-  // Function to check if a symbol is an operator
+  //Function to check if a symbol is an operator
   const isOperator = (symbol: string) => {
     switch (symbol) {
       case '+':
@@ -21,7 +21,6 @@ export function App() {
     }
   };
 
-
   // Function to perform the calculation
   const calculate = () => {
     // If the last character is an operator, do not calculate
@@ -29,11 +28,9 @@ export function App() {
     // Clean the expression so that two operators in a row use the last operator
     // For example: 5 * - + 5 = 10
     const parts = et.split(' ');
-    console.log(typeof parts);
     const newParts = [];
-
     for (let i = parts.length - 1; i >= 0; i--) {
-      if (['*', '/', '+'].includes(parts[i]) && isOperator(parts[i - 1])) {
+      if (['*', '/', '+', '-'].includes(parts[i]) && isOperator(parts[i - 1])) {
         newParts.unshift(parts[i]);
         let j = 0;
         let k = i - 1;
