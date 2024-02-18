@@ -6,8 +6,6 @@ export function App() {
   const [answer, setAnswer] = useState('');
   const et = expression.trim();
 
-  //const displayExpress = useRef(null);
-
   //Function to check if a symbol is an operator
   const isOperator = (symbol: string) => {
     switch (symbol) {
