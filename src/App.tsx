@@ -6,6 +6,7 @@ export function App() {
   const [answer, setAnswer] = useState('');
   const et = expression.trim();
 
+
   //Function to check if a symbol is an operator
   const isOperator = (symbol: string) => {
     switch (symbol) {
@@ -45,7 +46,7 @@ export function App() {
     // Join the cleaned parts to form a new expression
     const newExpression = newParts.join(' ');
 
-// Evaluate and set the answer v1
+// Evaluate and set the answer
     if (isOperator(newExpression.charAt(0))) {
       setAnswer(eval(answer + newExpression) as string);
     } else {
@@ -100,17 +101,15 @@ const buttonPress = (symbol: string) => {
   }
 };
 
-
-
   return (
     <>
       <div className='container'>
         <h1>Calculator Application</h1>
         <div id='calculator'>
         <div id='display' style={{ textAlign: 'right' }}>
-          <div id='answer'>{answer !== '' ? answer : '0'}</div>
-          <div id='expression'>{expression}</div>
-        </div>
+  {answer !== '' ? answer : '0'}
+  {expression.replace(/^0+/, '')}
+</div>
           <button
             id='clear'
             onClick={() => buttonPress('clear')}
