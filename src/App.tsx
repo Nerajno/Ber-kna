@@ -2,10 +2,11 @@ import { useState } from 'react';
 import './App.css';
 
 export function App() {
+  const [answer, setAnswer] = useState('0');
   const [expression, setExpression] = useState('');
-  const [answer, setAnswer] = useState('');
   const et = expression.trim();
 
+  // console.log("answer" +answer," expression" + expression);
 
   //Function to check if a symbol is an operator
   const isOperator = (symbol: string) => {
@@ -46,7 +47,7 @@ export function App() {
     // Join the cleaned parts to form a new expression
     const newExpression = newParts.join(' ');
 
-// Evaluate and set the answer
+    // Evaluate and set the answer
     if (isOperator(newExpression.charAt(0))) {
       setAnswer(eval(answer + newExpression) as string);
     } else {
@@ -55,61 +56,61 @@ export function App() {
     setExpression('');
   };
 
-// Function to handle button presses
-const buttonPress = (symbol: string) => {
-  switch (symbol) {
-    case 'clear':
-      // Clear the expression and answer
-      setExpression('');
-      setAnswer('');
-      break;
-    case 'negative':
-      if (answer === '') return;
-      // Toggle the sign of the answer
-      setAnswer(
-        answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer
-      );
-      break;
-    case 'percentage':
-      if (answer === '') return;
-      // Calculate percentage and set the answer
-      setAnswer((parseFloat(answer.toString()) / 100).toString());
-      break;
-    case '=':
-      // Trigger the calculation
-      calculate();
-      break;
-    case '0':
-      // Allow adding zeros to the expression, removing leading zeros
-      setExpression(expression === '0' ? '0' : expression + symbol);
-      break;
-    case '.':
-      // Allow adding a decimal point to the expression
-      const lastNum = expression.split(/[-+/*]/g).pop();
-      if (!lastNum || lastNum.includes('.')) return;
-      setExpression(expression + symbol);
-      break;
-    default:
-      // Handle other digits and symbols
-      if (expression.charAt(0) === '0') {
-        // Remove leading zero if it exists
-        setExpression(expression.slice(1) + symbol);
-      } else {
-        setExpression(expression + symbol); // Append the symbol to the expression
-      }
-      break;
-  }
-};
+  // Function to handle button presses
+  const buttonPress = (symbol: string) => {
+    switch (symbol) {
+      case 'clear':
+        // Clear the expression and answer
+        setExpression('');
+        setAnswer('');
+        break;
+      case 'negative':
+        if (answer === '') return;
+        // Toggle the sign of the answer
+        setAnswer(
+          answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer
+        );
+        break;
+      case 'percentage':
+        if (answer === '') return;
+        // Calculate percentage and set the answer
+        setAnswer((parseFloat(answer.toString()) / 100).toString());
+        break;
+      case '=':
+        // Trigger the calculation
+        calculate();
+        break;
+      case '0':
+        // Allow adding zeros to the expression, removing leading zeros
+        setExpression(expression === '0' ? '0' : expression + symbol);
+        break;
+      case '.':
+        // Allow adding a decimal point to the expression
+        const lastNum = expression.split(/[-+/*]/g).pop();
+        if (!lastNum || lastNum.includes('.')) return;
+        setExpression(expression + symbol);
+        break;
+      default:
+        // Handle other digits and symbols
+        if (expression.charAt(0) === '0') {
+          // Remove leading zero if it exists
+          setExpression(expression.slice(1) + symbol);
+        } else {
+          setExpression(expression + symbol); // Append the symbol to the expression
+        }
+        break;
+    }
+  };
 
   return (
     <>
       <div className='container'>
         <h1>Calculator Application</h1>
         <div id='calculator'>
-        <div id='display' style={{ textAlign: 'right' }}>
-  {answer !== '' ? answer : '0'}
-  {expression.replace(/^0+/, '')}
-</div>
+          <div id='display' style={{ textAlign: 'right' }}>
+            {answer !== '' ? answer : answer}
+            {expression.replace(/^0+/, '')}
+          </div>
           <button
             id='clear'
             onClick={() => buttonPress('clear')}
