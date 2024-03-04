@@ -60,7 +60,7 @@ button:active {
   transform: scale(0.95);
 }
 
-#answer {
+#display {
   font-size: 48px;
   height: 48px;
 }

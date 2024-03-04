@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 
 export function App() {
-  const [answer, setAnswer] = useState('0');
+  const [answer, setAnswer] = useState('');
   const [expression, setExpression] = useState('');
   const et = expression.trim();
 
@@ -108,7 +108,7 @@ export function App() {
         <h1>Calculator Application</h1>
         <div id='calculator'>
           <div id='display' style={{ textAlign: 'right' }}>
-            {answer !== '' ? answer : answer}
+            {answer !== '' ? answer : "0" }
             {expression.replace(/^0+/, '')}
           </div>
           <button
