@@ -6,8 +6,6 @@ export function App() {
   const [expression, setExpression] = useState('');
   const et = expression.trim();
 
-  // console.log("answer" +answer," expression" + expression);
-
   //Function to check if a symbol is an operator
   const isOperator = (symbol: string) => {
     switch (symbol) {
@@ -81,16 +79,17 @@ export function App() {
         calculate();
         break;
       case '0':
-        // Allow adding zeros to the expression, removing leading zeros
-        setExpression(expression === '0' ? '0' : expression + symbol);
-        break;
-      case '.':
-        // Allow adding a decimal point to the expression
-        const lastNum = expression.split(/[-+/*]/g).pop();
-        if (!lastNum || lastNum.includes('.')) return;
-        setExpression(expression + symbol);
-        break;
-      default:
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        // Update the default value of answer when a number or operator is pressed
+        setAnswer(symbol);
         // Handle other digits and symbols
         if (expression.charAt(0) === '0') {
           // Remove leading zero if it exists
@@ -98,6 +97,26 @@ export function App() {
         } else {
           setExpression(expression + symbol); // Append the symbol to the expression
         }
+        break;
+      case '.':
+        // Allow adding a decimal point to the expression if the last character is a number
+        if (/[\d.]$/.test(expression)) {
+          // Check if the last number already has a decimal point
+          const lastNum = expression.split(/[-+/*]/g).pop();
+          if (!lastNum || !lastNum.includes('.')) {
+            setExpression(expression + symbol);
+          }
+        }
+        break;
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+        // Update the default value of answer when an operator is pressed
+        setAnswer(symbol);
+        setExpression(expression + ' ' + symbol + ' ');
+        break;
+      default:
         break;
     }
   };
