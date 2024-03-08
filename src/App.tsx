@@ -54,6 +54,11 @@ export function App() {
     setExpression('');
   };
 
+  const handleClear = () => {
+    setExpression('');
+    setAnswer('');
+  };
+
   // Function to handle button presses
   const buttonPress = (symbol: string) => {
     switch (symbol) {
@@ -127,14 +132,10 @@ export function App() {
         <h1>Calculator Application</h1>
         <div id='calculator'>
           <div id='display' style={{ textAlign: 'right' }}>
-            {answer !== '' ? answer : "0" }
+            {answer !== '' ? answer : '0'}
             {expression.replace(/^0+/, '')}
           </div>
-          <button
-            id='clear'
-            onClick={() => buttonPress('clear')}
-            className='light-gray'
-          >
+          <button id='clear' onClick={handleClear} className='light-gray'>
             C
           </button>
           <button
@@ -264,3 +265,6 @@ export function App() {
     </>
   );
 }
+
+
+//notes
