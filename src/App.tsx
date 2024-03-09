@@ -19,6 +19,12 @@ export function App() {
     }
   };
 
+  // Clear the expression and answer
+  const handleClear = () => {
+    setExpression('');
+    setAnswer('');
+  };
+
   // Function to perform the calculation
   const calculate = () => {
     // If the last character is an operator, do not calculate
@@ -54,18 +60,11 @@ export function App() {
     setExpression('');
   };
 
-  const handleClear = () => {
-    setExpression('');
-    setAnswer('');
-  };
-
   // Function to handle button presses
   const buttonPress = (symbol: string) => {
     switch (symbol) {
       case 'clear':
-        // Clear the expression and answer
-        setExpression('');
-        setAnswer('');
+        handleClear();
         break;
       case 'negative':
         if (answer === '') return;
