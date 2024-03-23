@@ -70,8 +70,7 @@ export function App() {
         if (answer === '') return;
         // Toggle the sign of the answer
         setAnswer(
-          answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer
-        );
+          answer.toString().charAt(0) === '-' ? answer.slice(1) : '-' + answer);
         break;
       case 'percentage':
         if (answer === '') return;
